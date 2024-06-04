@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: background-color: #8BC6EC;
+            background-image: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #555;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 20px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            margin: 10px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li h2 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        img {
+            display: block;
+            margin-top: 10px;
+            border-radius: 5px;
+            max-width: 100%;
+        }
+
+        form {
+            display: inline;
+        }
+
+        button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c82333;
+        }
+
+        .login-signup {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .login-signup p {
+            margin: 10px 0;
+        }
+
+        .login-signup a {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-signup a:hover {
+            background-color: #fff;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CATASIM</h1>
+        <h2>A Disaster Response Coordination System</h2>
+        {% if 'user_id' in session %} 
+        <a href="{{ url_for('report') }}">Report a Disaster</a>
+        <a href="{{ url_for('resources_page') }}">Resource Management</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <ul>
+            {% for report in reports %}
+            <li>
+                <h2>{{ report.category }} - {{ report.subcategory }}</h2>
+                <p>Location: {{ report.location }}</p>
+                <p>{{ report.description }}</p>
+                {% if report.photo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ report.photo) }}" alt="Photo">
+                {% endif %}
+                <!-- Add Update and Delete links -->
+                <a href="{{ url_for('update', id=report.id) }}">Update</a>
+                <form action="{{ url_for('delete', id=report.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="login-signup">
+            <p><a href="{{ url_for('login') }}">Log In</a></p>
+            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up Here</a></p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Disaster Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            width: 50%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        select,
+        input[type="file"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Update Disaster Report</h1>
+    <form action="{{ url_for('update', id=report.id) }}" method="post" enctype="multipart/form-data">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ report.location }}" required>
+        
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required>{{ report.description }}</textarea>
+        
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+            <option value="Natural" {% if report.category == 'Natural' %} selected {% endif %}>Natural</option>
+            <option value="Man-Made" {% if report.category == 'Man-Made' %} selected {% endif %}>Man-Made</option>
+        </select>
+        
+        <label for="subcategory">Subcategory:</label>
+        <select id="subcategory" name="subcategory" required>
+            <option value="Earthquake" {% if report.subcategory == 'Earthquake' %} selected {% endif %}>Earthquake</option>
+            <option value="Cyclone" {% if report.subcategory == 'Cyclone' %} selected {% endif %}>Cyclone</option>
+            <option value="Floods" {% if report.subcategory == 'Floods' %} selected {% endif %}>Floods</option>
+            <!-- Add other subcategories as needed -->
+        </select>
+        
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" name="photo">
+        
+        <button type="submit">Update Report</button>
+    </form>
+</body>
+</html>

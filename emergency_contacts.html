@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Contacts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            background-image: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #333;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        form input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #4cae4c;
+        }
+
+        #contacts {
+            margin-top: 20px;
+        }
+
+        .contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .contact span {
+            flex-grow: 1;
+        }
+
+        .contact form {
+            display: inline;
+        }
+
+        .contact button {
+            background-color: #d9534f;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .contact button:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <h1>CATASIM</h1>
+    <h2>A Disaster Response Coordination System</h2>
+    <nav>
+        <a href="{{ url_for('report') }}">Report a Disaster</a>
+        <a href="{{ url_for('resources_page') }}">Resource Management</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+    <div class="container">
+        <h1>Emergency Contacts</h1>
+        <form action="{{ url_for('add_contact') }}" method="post">
+            <input type="text" name="name" placeholder="Name" required>
+            <!-- Use pattern attribute to enforce phone number format -->
+            <input type="text" name="phone" placeholder="Phone" pattern="[0-9]{10}" title="Phone number should be 10 digits" required>
+            <input type="text" name="category" placeholder="Category" required>
+            <button type="submit">Add Contact</button>
+        </form>
+        <div id="contacts">
+            <h2>Contacts</h2>
+            <ul>
+                {% for contact in contacts %}
+                <li class="contact">
+                    <span>{{ contact.name }} ({{ contact.category }}) - {{ contact.phone }}</span>
+                    <form action="{{ url_for('delete_contact', id=contact.id) }}" method="post">
+                        <button type="submit">Remove</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

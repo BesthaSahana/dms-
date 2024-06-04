@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            text-align: center;
+            color: #555;
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 10px 20px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            margin: 0 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        li {
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        li h2 {
+            margin-top: 0;
+            color: #495057;
+        }
+
+        li p {
+            color: #6c757d;
+        }
+
+        li img {
+            display: block;
+            margin-top: 10px;
+            border-radius: 5px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        li .actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        li .actions a,
+        li .actions button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        li .actions button:hover,
+        li .actions a:hover {
+            background-color: #218838;
+        }
+
+        li .actions button.delete {
+            background-color: #dc3545;
+        }
+
+        li .actions button.delete:hover {
+            background-color: #c82333;
+        }
+
+        .login-signup {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-signup a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .login-signup a:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav a {
+                margin-bottom: 10px;
+            }
+
+            li {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>CATASIM</h1>
+    <h2>A Disaster Response Coordination System</h2>
+    {% if 'user_id' in session %}
+    <nav>
+        <a href="{{ url_for('report') }}">Report a Disaster</a>
+        <a href="{{ url_for('resources_page') }}">Resource Management</a>
+        <a href="{{ url_for('emergency_contacts') }}">Emergency Contacts</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+    <ul>
+        {% for report in reports %}
+        <li>
+            <h2>{{ report.category }} - {{ report.subcategory }}</h2>
+            <p>Location: {{ report.location }}</p>
+            <p>{{ report.description }}</p>
+            {% if report.photo %}
+            <img src="{{ url_for('static', filename='uploads/' ~ report.photo) }}" alt="Photo">
+            {% endif %}
+            <div class="actions">
+                <a href="{{ url_for('update', id=report.id) }}">Update</a>
+                <form action="{{ url_for('delete', id=report.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="delete">Delete</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="login-signup">
+        <p>Please <a href="{{ url_for('login') }}">log in</a> to view and report disasters.</p>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up here</a>.</p>
+    </div>
+    {% endif %}
+</body>
+</html>
